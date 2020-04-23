@@ -602,10 +602,15 @@ def main():
             for key in sorted(state_list[i]):
                 separator = " "
                 output_string.append(separator.join([key, "→", str(state_list[i][key])]))
-
-            state_string = ''.join(["{", ", ".join(output_string), "}"])
-            step_string = ' '.join(['⇒', step_list[i]])
-            print(step_string)
+    if len(state_list) == 1 and state_list[0] == {} and text[0:4] == "skip":
+        print('')
+    else:
+        for i in range(len(state_list)):
+            output_string = []
+            for key in sorted(state_list[i]):
+                separator = " "
+                output_string.append(separator.join([key, "→", str(state_list[i][key])]))
+    print('{'+output_string[0]+'}')
             
 
 if __name__ == '__main__':
