@@ -14,13 +14,13 @@ class Lexer():
     def __init__(self, text):
         self.state = {}
         self.text = text
-        #keep track of reading 
+
         self.pos = 0
         self.current_char = self.text[self.pos]
    
     def error(self):
         raise Exception("This input is not supported")
-    #increase the cursor to the next position, if valid then set current_char to the new char
+ 
     def next(self):
         self.pos += 1
         #check if it is the end of line
@@ -34,7 +34,7 @@ class Lexer():
             result = result + self.current_char
             self.next()
         return int(result)
-    #integer arrays reprented by lists
+
     def arr(self):
         result = ''
         self.next()
@@ -42,7 +42,10 @@ class Lexer():
             result = result+self.current_char
             self.next()
         self.next()
-        result = [int(t) for t in result.split(',')]
+        if result.strip()=='':
+            result=[]
+        else:
+            result = [int(t) for t in result.split(',')]
         return result
     def assign(self):
         result = ''
@@ -102,7 +105,7 @@ class Lexer():
                 return Token("RIGHTPAR", ")")
             if self.current_char == ":":
                 return Token("ASSIGN", self.assign())
-            #Alphebetical inputs
+            #keywords
             if self.current_char.isalpha():
                 result = ''
                 while self.current_char is not None and (self.current_char.isalpha() or self.current_char.isdigit()):
@@ -129,7 +132,7 @@ class Lexer():
             self.error()
         return(Token("EOF", None))
 
-#create all the needed nodes
+#creating nodes for different operators and keywords
 class IntNode():
     def __init__(self, token):
         self.value = token.value
@@ -183,7 +186,7 @@ class WhileNode():
         self.wtrue = wtrue
         self.wfalse = wfalse
         self.op = "WHILE"
-#just like while
+
 class IfNode():
     def __init__(self, cond, iftrue, iffalse):
         self.cond =cond
@@ -191,8 +194,7 @@ class IfNode():
         self.iffalse = iffalse
         self.op = "IF"
 
-#lexer tokenize everything with the proper token, each time object.tokenize is called, the next value gets tokenized
-#Parser should parse out a AST.
+
 class Parser():
     def __init__(self, lexer):
         self.lexer = lexer
@@ -207,21 +209,21 @@ class Parser():
         if token.type == "MINUS":
             self.current_token = self.lexer.tokenize()
             token = self.current_token
-            #print('first',token.value)
+            
             token.value = -token.value
-            #print(token.value)
+            
             node = IntNode(token)
         elif token.type == "INT":
             node = IntNode(token)
-            #print(node.value)
+            
         elif token.type == "VAR":
             node = VarNode(token)
         elif token.type == "ARR":
             node = ArrNode(token)
         elif token.type == "NOT":
-            #print("got to not")
+            
             self.current_token = self.lexer.tokenize()
-            #print(self.current_token)
+            
             if self.current_token.type == "LEFTPAR":
                 self.current_token = self.lexer.tokenize()
                 node = self.bexpr()
@@ -245,7 +247,7 @@ class Parser():
         elif token.type == "SKIP":
             node = SkipNode(token)
         elif token.type == "WHILE":
-            #go to the next token
+            
             self.current_token = self.lexer.tokenize()
             cond = self.bexpr()
             wfalse = SkipNode(Token("SKIP","skip"))
@@ -275,24 +277,24 @@ class Parser():
     def aterm(self):
         node = self.factor()
         while self.current_token.type == 'MUL':
-            #print(self.current_token)
+           
             ttype = self.current_token.type
             self.current_token = self.lexer.tokenize()
             node = BinopNode(left = node, right = self.factor(), op = ttype)
-            #print("in term",node.left, node.right) 
+        
         return node
         
     def aexpr(self):
         node = self.aterm()  
-        #print("in expression", token.value)
+        
         while self.current_token.type in ("PLUS", "MINUS"):
             #print(self.current_token)
             ttype = self.current_token.type
             self.current_token = self.lexer.tokenize()
             node = BinopNode(left = node, right = self.aterm(), op = ttype)
-            #print("in expr",node.left, node.right)
+            
         return node
-    #this returns a node that represent Aexpr for debugging
+    
     def aparse(self):
         return self.aexpr()
 
@@ -313,7 +315,7 @@ class Parser():
             self.current_token = self.lexer.tokenize()
             node = BinopNode(left = node, right = self.bterm(), op = ttype)
         return node
-    #this returns a node that represents combination of aexpr and bexpr
+ 
     def bparse(self):
         return self.bexpr()
 
@@ -334,15 +336,15 @@ class Parser():
             self.current_token = self.lexer.tokenize()
             node = CompNode(left = node, right = self.cterm(), op = ttype)
         return node
-    #this returns a node that represents combination of aexpr and bexpr
+    
     def cparse(self):
         return self.cexpr()
 
-#General helper function for evaluating AST.
+
 def create_dict(var, value):
     return dict([tuple([var,value])])
 
-#Helper fuctions to do match:
+
 def switch(op):
     cases = {
     "PLUS":'+', 
@@ -379,7 +381,6 @@ def print_command(node):
     else:
         raise Exception("Pretty sure you made a mistake")
 
-#helper class to do string mantipulation
 class Sstr():
     def __init__(self, string):
         self.string = string
@@ -387,20 +388,18 @@ class Sstr():
         return (self.string + other.string)
     def __sub__(self, other):
         return (self.string.replace(other.string, "", 1))
-       #return (re.sub(other.string,'',self.string, count=1))
-#root = parsewhile.test("if (true) then x:=1 else zir9 := 2")
-#parsewhile.evaluate_print(root.ast, root.state, root.print_var, root.print_state, root.print_step)
+ 
 
 def evaluate_print(ast, state, print_var, print_state, print_step, init_step):
     state = state
     node = ast
-    #This is to store all the variables that need printing, in case var without declaration
+   
     print_var = print_var
-    #This is to store all the states
+ 
     print_state = print_state
     print_step = print_step
     init_step = init_step
-    #These are the fundamentals that won't add to any lists above
+   
     if node.op in ("INT", "ARR", "BOOL"):
         return node.value
     elif node.op == "VAR":
@@ -552,12 +551,7 @@ class Interpreter():
         raise Exception("This input is invalid")
     def visit(self):
         return evaluate_print(self.ast, self.state, self.print_var, self.print_state, self.print_step, self.init_step)
-#returns an interpreter object for debugging
-def test(text):
-    a = Lexer(text)
-    b = Parser(a)
-    c = Interpreter(b)
-    return c
+
 
 def main():
     contents = []
@@ -572,7 +566,7 @@ def main():
     
     text = ' '.join(contents)
     text = ' '.join(text.split())
-    #check if the first command is skip
+   
 
     lexer = Lexer(text)
     parser = Parser(lexer)
