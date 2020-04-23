@@ -574,38 +574,29 @@ def main():
     text = ' '.join(text.split())
     #check if the first command is skip
 
-    #print(text)
     lexer = Lexer(text)
     parser = Parser(lexer)
     interpreter = Interpreter(parser)
     interpreter.visit()
     step_list = interpreter.print_step
-    #flattened the nested list
+    # flattened the nested list
     step_list = [item for sublist in step_list for item in sublist]
     state_list = interpreter.print_state
     if text[0:5] == "skip;" or text[0:6] == "skip ;":
         del step_list[0]
         del state_list[0]
-    
+
     step_list[-1] = 'skip'
 
     if len(state_list) > 10000:
         state_list = state_list[0:10000]
         step_list = step_list[0:10000]
-    
-    #print(print_var)
-    if len(state_list) ==1 and state_list[0] == {} and text[0:4] == "skip": 
-        print('')
-    else:
-        for i in range(len(state_list)):
-            output_string = []
-            for key in sorted(state_list[i]):
-                separator = " "
-                output_string.append(separator.join([key, "→", str(state_list[i][key])]))
+
+    # print(print_var)
     if len(state_list) == 1 and state_list[0] == {} and text[0:4] == "skip":
-        print('')
+        print('{}')
     else:
-        
+
         for i in range(len(state_list)):
             output_string = []
             for key in sorted(state_list[i]):
@@ -614,7 +605,7 @@ def main():
         #print(output_string)
         a=", ".join(output_string)
         print("".join(['{',a,'}']))
-            
+
 
 if __name__ == '__main__':
     main()
