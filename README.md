@@ -2,14 +2,12 @@
 
 ### Programming Assignment 1 - The WHILE language: An Imperative Language
  ## Problem statement ##
- As per the homework requirement, this script will do the following things:
 
-The script gets inputs via stdin and output via stdout
-The script parses the input into an Abstract Syntax Tree (AST)
-The AST is evaulated in the interpreter and the script outputs the results.
-The program should print out small step semantics.
+
+
 While supports arithmetic expressions, boolean expressions and commands.
-
+AST is created with grammar having precedence for the operations as: ':=' > '=' > '>' > V > * > -> + > NUM
+ 
 
 
 ## My implemenattion
