@@ -18,7 +18,7 @@ I have implemented a LL(1) predictive parser for WHILE language. Parser is
 * Factors: LPAREN Expression RPAREN
 * Term:  Factor TIMES Term
 * Expression: Expression PLUS Term
-So inorder to parse an expression, I want to parse a term first, in oredr to parse term, i want to parse factor first. THis is a recursive process. Till factor=NUM.
+- So inorder to parse an expression, I want to parse a term first, in oredr to parse term, i want to parse factor first. THis is a recursive process. Till factor=NUM.
 ### Prerequisites
 
 
