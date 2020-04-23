@@ -605,9 +605,9 @@ def main():
     if len(state_list) == 1 and state_list[0] == {} and text[0:4] == "skip":
         print('')
     else:
-        output_string = []
+        
         for i in range(len(state_list)):
-
+            output_string = []
             for key in sorted(state_list[i]):
 
                 output_string.append(' '.join([key, "→", str(state_list[i][key])]))
