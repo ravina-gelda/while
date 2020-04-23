@@ -605,7 +605,7 @@ def main():
 
             state_string = ''.join(["{", ", ".join(output_string), "}"])
             step_string = ' '.join(['⇒', step_list[i]])
-            print(step_string, state_string, sep = ', ')
+            print(step_string)
             
 
 if __name__ == '__main__':
