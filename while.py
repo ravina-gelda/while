@@ -605,12 +605,15 @@ def main():
     if len(state_list) == 1 and state_list[0] == {} and text[0:4] == "skip":
         print('')
     else:
+        output_string = []
         for i in range(len(state_list)):
-            output_string = []
+
             for key in sorted(state_list[i]):
-                separator = " "
-                output_string.append(separator.join([key, "→", str(state_list[i][key])]))
-    print('{'+output_string[0]+'}')
+
+                output_string.append(' '.join([key, "→", str(state_list[i][key])]))
+        #print(output_string)
+        a=", ".join(output_string)
+        print("".join(['{',a,'}']))
             
 
 if __name__ == '__main__':
