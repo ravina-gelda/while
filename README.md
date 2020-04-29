@@ -45,4 +45,4 @@ Need Python3 installed
 * https://www.youtube.com/watch?v=TastAWp8eIE
 * https://www.youtube.com/watch?v=E-iL1Q4ys3k&list=PL0300FE43396456C1&index=2
 * http://www.cs.ecu.edu/karl/5220/spr16/Notes/
-* https://github.com/versey-sherry/while
+
